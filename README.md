@@ -64,6 +64,10 @@ With other systems
 
 * Rake
 
+## This fork's changes
+
+1. Do not use Rake::DSL. Call rake methods explicitly.
+
 ## Author
 
 * [Joel Moss](mailto:joel@developwithstyle.com)

@@ -2,8 +2,8 @@ module Rake::Hooks
   def before(*task_names, &new_task)
     task_names.each do |task_name|
       old_task = Rake.application.instance_variable_get('@tasks').delete(task_name.to_s)
-      desc old_task.full_comment
-      task task_name => old_task.prerequisites do
+      Rake.application.last_description = old_task.full_comment
+      Rake::Task.define_task(task_name => old_task.prerequisites) do
         new_task.call
         old_task.invoke
       end
@@ -16,14 +16,13 @@ module Rake::Hooks
 
     task_names.each do |task_name|
       old_task = Rake.application.instance_variable_get('@tasks').delete(task_name.to_s)
-      desc old_task.full_comment
-      task task_name => old_task.prerequisites do
+      Rake.application.last_description = old_task.full_comment
+      Rake::Task.define_task(task_name => old_task.prerequisites) do
         begin
           old_task.invoke
         rescue
           raise unless ignore_exceptions
         end
-
         new_task.call
       end
     end
